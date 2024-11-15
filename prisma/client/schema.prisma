@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRoles {
+  ADMIN
+  STUDENT
+  TEACHER
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String?
+  email         String         @unique
+  phone         String?
+  password      String
+  role          UserRoles      @default(STUDENT)
+  instituteId   String?        @unique
+  profile_pic   String?
+  home_district String?
+  whatsapp      String?
+  facebook      String?
+  instagram     String?
+  linkedin      String?
+  codeforces    String?
+  github        String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Notice        Notice[]
+  Notification  Notification[]
+  FundEntry     FundEntry[]
+}
+
+model NotificationTokens {
+  id            Int      @id @default(autoincrement())
+  userId        String?
+  deviceDetails String   @default("Unknown Device")
+  token         String
+  createdAt     DateTime @default(now())
+}
+
+model Notice {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(500)
+  description String   @db.VarChar(5000)
+  icon        String
+  creator_id  String
+  created_by  User     @relation(references: [id], fields: [creator_id])
+  created_at  DateTime @default(now())
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(500)
+  description String   @db.VarChar(5000)
+  creator_id  String
+  created_by  User     @relation(references: [id], fields: [creator_id])
+  created_at  DateTime @default(now())
+}
+
+model Fund {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  creator_id  String
+  created_at  DateTime @default(now())
+}
+
+model FundEntry {
+  id            Int      @id @default(autoincrement())
+  fund_id       Int      @unique
+  funded_amount Float
+  user_id       String
+  user          User     @relation(references: [id], fields: [user_id])
+  created_at    DateTime @default(now())
+}
+
+enum EntryType {
+  DEPOSIT
+  WITHDRAW
+}
+
+model IndependentFund {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  amount      Float
+  type        EntryType
+  creator_id  String
+  created_at  DateTime  @default(now())
+}
+
+model AdminActivity {
+  id         Int      @id @default(autoincrement())
+  title      String
+  creator_id String
+  created_at DateTime @default(now())
+}

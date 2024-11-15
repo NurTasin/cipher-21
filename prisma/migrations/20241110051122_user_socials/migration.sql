@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `codeforces` VARCHAR(191) NULL,
+    ADD COLUMN `facebook` VARCHAR(191) NULL,
+    ADD COLUMN `github` VARCHAR(191) NULL,
+    ADD COLUMN `instagram` VARCHAR(191) NULL,
+    ADD COLUMN `linkedin` VARCHAR(191) NULL,
+    ADD COLUMN `whatsapp` VARCHAR(191) NULL;
