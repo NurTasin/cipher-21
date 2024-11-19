@@ -163,7 +163,7 @@ export default function HackerStudentProfile() {
                 {student.socials.codeforces && (
                   <Link
                     key={student.socials.codeforces}
-                    href={`https://codeforces.com/profile/${student.socials.codeforces}`}
+                    href={student.socials.codeforces}
                     className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110 hover:bg-gray-700 border-2 border-green-500 group"
                     target="_blank"
                     rel="noopener noreferrer"

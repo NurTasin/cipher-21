@@ -2,7 +2,7 @@ import { AlertCircle, Clock, ShieldAlert, User } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import db from '@/lib/db';
 import NoticeIcon from '@/components/noticeIcon';
-import noticeCategories from '@/lib/cat2icon';
+import {noticeCategories} from '@/lib/cat2icon';
 
 export default async function SingleNoticePage({ params }: { params: { id: string } }) {
     const noticeId = params.id;

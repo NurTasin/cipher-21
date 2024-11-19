@@ -7,6 +7,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { AlertCircle, DollarSign, FileText, XCircle } from 'lucide-react'
 import { RingLoader } from 'react-spinners';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { noticeCategoriesList } from '@/lib/cat2icon';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { toast } from '@/hooks/use-toast';
 
 
 interface AdminActivity {
@@ -27,9 +31,34 @@ interface Response<T> {
   msg?: string;
   data?: T;
 }
+
+interface NoticeModal {
+  title?: string;
+  description?: string;
+  category?: string;
+}
+
+interface FundModal {
+  title?: string;
+  type?: string;
+  amount?: number;
+}
+
 export default function AdminPanel() {
   const [adminData, setAdminData] = useState<AdminData | undefined>(undefined)
   const [showModal, setShowModal] = useState<string | null>(null)
+  const [noticeModalShow, setNoticeModalShow] = useState(false)
+  const [noticeModalData, setNoticeModalData] = useState<NoticeModal>({
+    category: undefined,
+    title: undefined,
+    description: undefined
+  })
+  const [fundModalShow, setFundModalShow] = useState(false)
+  const [fundModalData, setFundModalData] = useState<FundModal>({
+    title: undefined,
+    type: undefined,
+    amount: undefined
+  })
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -47,6 +76,74 @@ export default function AdminPanel() {
     setShowModal(action)
   }
 
+  const handleNoticeModalSubmit = async () => {
+    setLoading(true)
+    const response = await fetch('/api/notice', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: noticeModalData.title,
+        description: noticeModalData.description,
+        icon: noticeModalData.category
+      })
+    });
+    if (response.status === 200) {
+      setNoticeModalShow(false);
+      toast({
+        title: 'Notice Created',
+        description: 'Notice created successfully.',
+      })
+    } else {
+      const message = (await response.json()).error
+      toast({
+        variant: 'destructive',
+        title: 'Notice Creation Failed',
+        description: message || 'Unknown error',
+      });
+    }
+    setLoading(false)
+  }
+
+  const handleFundModalSubmit = async () => {
+    if(!fundModalData.title || !fundModalData.amount || !fundModalData.type) {
+      toast({
+        title: 'Error',
+        description: 'Please fill in all fields',
+        variant: 'destructive'
+      });
+      return;
+    }
+    setLoading(true)
+    const response = await fetch('/api/fund-entry', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: `Fund created on ${new Date().toLocaleDateString()}`,
+        description: fundModalData.title,
+        type: fundModalData.type,
+        amount: fundModalData.amount
+      })
+    });
+    if(response.ok) {
+      setShowModal(null);
+      toast({
+        title: 'Fund entry created',
+        description: 'Fund entry created successfully',
+      });
+    }else{
+      toast({
+        title: 'Error',
+        description: 'Error creating fund entry',
+        variant: 'destructive'
+      });
+    }
+    setLoading(false);
+    console.log(fundModalData);
+  }
   const handleCloseModal = () => {
     setShowModal(null)
   }
@@ -79,12 +176,177 @@ export default function AdminPanel() {
                 <Button onClick={() => handleAction('cancelClass')} className="h-24 bg-green-700 hover:bg-green-600 text-black">
                   <XCircle className="mr-2 h-5 w-5" /> Cancel Class
                 </Button>
-                <Button onClick={() => handleAction('createFundEntry')} className="h-24 bg-green-700 hover:bg-green-600 text-black">
-                  <DollarSign className="mr-2 h-5 w-5" /> Create Fund Entry
-                </Button>
-                <Button onClick={() => handleAction('createNotice')} className="h-24 bg-green-700 hover:bg-green-600 text-black">
-                  <FileText className="mr-2 h-5 w-5" /> Create Notice
-                </Button>
+                {/* Fund Entry Modal */}
+                <Dialog open={fundModalShow} onOpenChange={setFundModalShow}>
+                  <DialogTrigger>
+                    <Button className="h-24 bg-green-700 hover:bg-green-600 text-black px-12">
+                      <FileText className="mr-2 h-5 w-5" /> Create Fund Entry
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px] bg-gray-900 border-green-500">
+                    <DialogHeader>
+                      <DialogTitle className="text-green-500">Create a New Fund Entry</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-2">
+                      <label htmlFor="title" className="text-sm font-medium text-green-500">
+                        Title
+                      </label>
+                      <Input
+                        id="title"
+                        placeholder="Enter notice title"
+                        className="bg-gray-800 border-green-500 text-green-500 placeholder-green-700"
+                        onChange={(e) => {
+                          setFundModalData({
+                            ...fundModalData,
+                            title: e.target.value
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="type" className="text-sm font-medium text-green-500">
+                        Type
+                      </label>
+                      <Select
+                        onValueChange={(val) => {
+                          setFundModalData({
+                            ...fundModalData,
+                            type: val
+                          })
+                        }}
+                      >
+                        <SelectTrigger id="type" className="bg-gray-800 border-green-500 text-green-500">
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-800 border-green-500">
+                          <SelectItem value={"DEPOSIT"} className="text-green-500">{"Deposit"}</SelectItem>
+                          <SelectItem value={"WITHDRAW"} className="text-green-500">{"Expense"}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="amount" className="text-sm font-medium text-green-500">
+                        Amount
+                      </label>
+                        <Input id="amount" type="number" placeholder="Enter amount" className="bg-gray-800 text-green-400 border-green-500"
+                          onChange={(e) => {
+                            setFundModalData({
+                              ...fundModalData,
+                              amount: parseFloat(e.target.value)
+                            })
+                          }}
+                        />
+                    </div>
+                    <div className="flex justify-end space-x-2 pt-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setFundModalShow(false)}
+                        className="border-green-500 text-green-500 hover:bg-green-500 hover:text-black"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="bg-green-500 text-black hover:bg-green-600"
+                        onClick={() => {
+                          handleFundModalSubmit()
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                {/* Notice Modal */}
+                <Dialog open={noticeModalShow} onOpenChange={setNoticeModalShow}>
+                  <DialogTrigger>
+                    <Button className="h-24 bg-green-700 hover:bg-green-600 text-black px-12">
+                      <FileText className="mr-2 h-5 w-5" /> Create Notice
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px] bg-gray-900 border-green-500">
+                    <DialogHeader>
+                      <DialogTitle className="text-green-500">Create a New Notice</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-2">
+                      <label htmlFor="title" className="text-sm font-medium text-green-500">
+                        Title
+                      </label>
+                      <Input
+                        id="title"
+                        placeholder="Enter notice title"
+                        className="bg-gray-800 border-green-500 text-green-500 placeholder-green-700"
+                        onChange={(e) => {
+                          setNoticeModalData({
+                            ...noticeModalData,
+                            title: e.target.value
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="description" className="text-sm font-medium text-green-500">
+                        Description
+                      </label>
+                      <Textarea
+                        id="description"
+                        placeholder="Enter notice description"
+                        className="bg-gray-800 border-green-500 text-green-500 placeholder-green-700"
+                        onChange={(e) => {
+                          setNoticeModalData({
+                            ...noticeModalData,
+                            description: e.target.value
+                          })
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="category" className="text-sm font-medium text-green-500">
+                        Category
+                      </label>
+                      <Select
+                        onValueChange={(value) => {
+                          setNoticeModalData({
+                            ...noticeModalData,
+                            category: value
+                          })
+                        }}
+                      >
+                        <SelectTrigger id="category" className="bg-gray-800 border-green-500 text-green-500">
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-800 border-green-500">
+                          {
+                            noticeCategoriesList.map((category, index) => (
+                              <SelectItem key={index} value={category[1]} className="text-green-500">{category[0]}</SelectItem>
+                            ))
+                          }
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex justify-end space-x-2 pt-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setNoticeModalShow(false)}
+                        className="border-green-500 text-green-500 hover:bg-green-500 hover:text-black"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="bg-green-500 text-black hover:bg-green-600"
+                        onClick={() => {
+                          handleNoticeModalSubmit()
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
 
               <Card className="bg-gray-800 border-green-500">
@@ -107,62 +369,6 @@ export default function AdminPanel() {
               </Card>
             </CardContent>
           </Card>
-
-          {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4">
-              <Card className="w-full max-w-md bg-gray-900 border-green-500">
-                <CardHeader>
-                  <CardTitle className="text-green-400">
-                    {showModal === 'cancelClass' ? 'Cancel Class' :
-                      showModal === 'createFundEntry' ? 'Create Fund Entry' :
-                        'Create Notice'}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {showModal === 'cancelClass' && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="className" className="text-green-400">Class Name</Label>
-                        <Input id="className" placeholder="Enter class name" className="bg-gray-800 text-green-400 border-green-500" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="cancelReason" className="text-green-400">Reason for Cancellation</Label>
-                        <Textarea id="cancelReason" placeholder="Enter reason for cancellation" className="bg-gray-800 text-green-400 border-green-500" />
-                      </div>
-                    </div>
-                  )}
-                  {showModal === 'createFundEntry' && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="amount" className="text-green-400">Amount</Label>
-                        <Input id="amount" type="number" placeholder="Enter amount" className="bg-gray-800 text-green-400 border-green-500" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="description" className="text-green-400">Description</Label>
-                        <Input id="description" placeholder="Enter description" className="bg-gray-800 text-green-400 border-green-500" />
-                      </div>
-                    </div>
-                  )}
-                  {showModal === 'createNotice' && (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="noticeTitle" className="text-green-400">Notice Title</Label>
-                        <Input id="noticeTitle" placeholder="Enter notice title" className="bg-gray-800 text-green-400 border-green-500" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="noticeContent" className="text-green-400">Notice Content</Label>
-                        <Textarea id="noticeContent" placeholder="Enter notice content" className="bg-gray-800 text-green-400 border-green-500" />
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button variant="outline" onClick={handleCloseModal} className="border-green-500 text-green-400 hover:bg-green-700 hover:text-black">Cancel</Button>
-                    <Button onClick={handleCloseModal} className="bg-green-700 hover:bg-green-600 text-black">Submit</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
         </>
       )}
     </div>
