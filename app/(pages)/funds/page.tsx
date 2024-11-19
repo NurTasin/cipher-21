@@ -1,27 +1,44 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ArrowUpIcon, ArrowDownIcon } from "lucide-react"
-import db from "@/lib/db"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
+import db from "@/lib/db";
+
+// Define a type for transactions
+type Transaction = {
+    id: number;
+    type: "DEPOSIT" | "WITHDRAW";
+    description: string;
+    amount: number;
+    created_at: Date;
+};
 
 const formatDate = (timestamp: Date) => {
-    return timestamp.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    })
-}
+    return new Date(timestamp).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    });
+};
 
-export default async function Component() {
-    const transactions = await db.independentFund.findMany()
+const getData = async () => {
+    const transactions: Transaction[] = await db.independentFund.findMany();
 
     const totalDeposits = transactions
-        .filter(t => t.type === 'DEPOSIT')
-        .reduce((sum, t) => sum + t.amount, 0)
+        .filter((t) => t.type === "DEPOSIT")
+        .reduce((sum, t) => sum + t.amount, 0);
 
     const totalExpenses = transactions
-        .filter(t => t.type === 'WITHDRAW')
-        .reduce((sum, t) => sum + t.amount, 0)
+        .filter((t) => t.type === "WITHDRAW")
+        .reduce((sum, t) => sum + t.amount, 0);
 
-    const currentBalance = totalDeposits - totalExpenses
+    const currentBalance = totalDeposits - totalExpenses;
+
+    return { transactions, totalDeposits, totalExpenses, currentBalance };
+};
+
+export const revalidate = 300; // ISR: Revalidate every 5 minutes
+
+export default async function FundPage() {
+    const { transactions, totalDeposits, totalExpenses, currentBalance } = await getData();
 
     return (
         <div className="min-h-[calc(100vh-275px)] md:min-h-[calc(100vh-160px)] w-full md:max-w-3xl mx-auto p-6 bg-black text-green-500 font-mono">
@@ -35,10 +52,10 @@ export default async function Component() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {transactions.map((transaction, index) => (
-                        <TableRow key={index} className="border-b border-green-900">
+                    {transactions.map((transaction) => (
+                        <TableRow key={transaction.id} className="border-b border-green-900">
                             <TableCell className="font-medium">
-                                {transaction.type === 'DEPOSIT' ? (
+                                {transaction.type === "DEPOSIT" ? (
                                     <span className="text-green-500 flex items-center">
                                         <ArrowUpIcon className="mr-2 h-4 w-4" />
                                         {transaction.description}
@@ -54,7 +71,11 @@ export default async function Component() {
                                 {formatDate(transaction.created_at)}
                             </TableCell>
                             <TableCell className="text-right">
-                                <span className={transaction.type === 'DEPOSIT' ? 'text-green-500' : 'text-red-500'}>
+                                <span
+                                    className={
+                                        transaction.type === "DEPOSIT" ? "text-green-500" : "text-red-500"
+                                    }
+                                >
                                     ৳&nbsp;{transaction.amount.toFixed(2)}
                                 </span>
                             </TableCell>
@@ -74,11 +95,11 @@ export default async function Component() {
                 </div>
                 <div className="flex justify-between border-t border-green-900 pt-2">
                     <span>Current Balance:</span>
-                    <span className={currentBalance >= 0 ? 'text-green-500' : 'text-red-500'}>
+                    <span className={currentBalance >= 0 ? "text-green-500" : "text-red-500"}>
                         ৳&nbsp;{currentBalance.toFixed(2)}
                     </span>
                 </div>
             </div>
         </div>
-    )
+    );
 }
