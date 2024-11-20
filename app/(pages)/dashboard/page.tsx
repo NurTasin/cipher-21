@@ -120,7 +120,7 @@ export default async function HackerStudentDashboard() {
                 </CardHeader>
                 <CardDescription className="text-green-600 px-6 mb-4">{new Date(notice.created_at).toLocaleString()}</CardDescription>
                 <CardContent>
-                  <p className="text-sm text-green-300 mb-4">{notice.description.length > 50 ? notice.description.slice(0, 50) + "..." : notice.description}</p>
+                  <p className="text-sm text-green-300 mb-4">{notice.description.length > 100 ? notice.description.slice(0, 100) + "..." : notice.description}</p>
                   <Link href={`/notices/${notice.id}`} className="inline-flex items-center text-sm font-medium text-green-500 hover:text-green-300 transition-colors">
                     Access Data <ChevronRight className="ml-1 h-4 w-4" />
                   </Link>
