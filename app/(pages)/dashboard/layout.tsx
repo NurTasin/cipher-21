@@ -12,14 +12,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             />
             <Script id="onesignal-init" strategy="afterInteractive">
                 {`
-                    window.OneSignalDeferred = window.OneSignalDeferred || [];
-                    window.OneSignalDeferred.push(async function(OneSignal) {
+                   window.OneSignalDeferred = window.OneSignalDeferred || [];
+                    OneSignalDeferred.push(async function(OneSignal) {
                         await OneSignal.init({
-                            appId: "42107061-c920-43f8-82f2-3bc7ee6ebebe",
-                            safari_web_id: "web.onesignal.auto.175a5781-a0a7-4966-97e0-0bfa01fcdb1f",
-                            notifyButton: {
-                                enable: true,
-                            },
+                        appId: "bae9c67d-0130-455d-af0a-352dbdab3e2c",
+                        safari_web_id: "web.onesignal.auto.28671d66-3da8-4a50-bcc4-1b29e015670b",
+                        notifyButton: {
+                            enable: true,
+                        },
                         });
                     });
                 `}
