@@ -34,7 +34,7 @@ export default async function NoticePage({ searchParams }: { searchParams: { pag
                             </CardHeader>
                             <CardDescription className="text-green-600 px-6 mb-4">{new Date(notice.created_at).toLocaleDateString()}</CardDescription>
                             <CardContent>
-                                <p className="text-green-500">{notice.description.length > 50 ? notice.description.slice(0, 50) + "..." : notice.description}</p>
+                                <p className="text-green-500">{notice.description.length > 100 ? notice.description.slice(0, 100) + "..." : notice.description}</p>
                             </CardContent>
                             <CardFooter>
                                 <Link href={`/notices/${notice.id}`} className="text-green-400 border-green-500 hover:bg-green-900">
