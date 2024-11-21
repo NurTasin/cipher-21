@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import jwt from "jsonwebtoken";
 import Link from "next/link";
+import NotifyPrompt from "@/components/notifyPrompt";
 
 const weekday = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
@@ -54,6 +55,7 @@ export default async function HackerStudentDashboard() {
   }
   return (
     <div className="min-h-screen bg-black p-4 md:p-8 text-green-400">
+      <NotifyPrompt />
       <div className="container mx-auto space-y-8">
         <Card className="bg-gray-900 border-green-500 border overflow-hidden shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40">
           <CardHeader className="bg-gradient-to-r from-green-900 to-green-700">
