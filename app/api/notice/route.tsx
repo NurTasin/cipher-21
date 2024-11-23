@@ -3,6 +3,7 @@ import db from "@/lib/db";
 import jwt from "jsonwebtoken";
 import { responseSchema } from "@/lib/responseSchema";
 import { Notice } from "@/prisma/client";
+import { NoticeNotification } from "@/lib/onesignal/notifications";
 
 export async function GET(req: NextRequest){
     const token = req.cookies.get("token");
@@ -91,7 +92,11 @@ export async function POST(req: NextRequest) {
             creator_id: tokenData.id,
         },
     });
-    return NextResponse.json(responseSchema<Notice>(false, "Notice Created", notice),{
+    const notificationSent = await NoticeNotification(notice.title, notice.description, req.nextUrl.origin + `/notices/${notice.id}`);
+    return NextResponse.json(responseSchema<any>(false, "Notice Created", {
+        ...notice,
+        notificationSent: notificationSent,
+    }),{
         status: 200
     });
 }
