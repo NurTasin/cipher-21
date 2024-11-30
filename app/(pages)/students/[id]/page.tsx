@@ -127,7 +127,7 @@ export default function HackerStudentProfile() {
                 {student.socials.whatsapp && (
                   <Link
                     key={student.socials.whatsapp}
-                    href={`https://wa.me/+88${student.socials.whatsapp}`}
+                    href={`https://wa.me/${student.instituteId=="CE-24059" || student.instituteId=="CE-24060" ? "": "+88"}${student.socials.whatsapp}`}
                     className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110 hover:bg-gray-700 border-2 border-green-500 group"
                     target="_blank"
                     rel="noopener noreferrer"
