@@ -32,6 +32,7 @@ export async function GET(req: NextRequest) {
                 instituteId: true,
                 name: true,
                 phone: true,
+                gender: true,
                 home_district: true,
                 email: true,
                 profile_pic: true,
@@ -51,7 +52,7 @@ export async function GET(req: NextRequest) {
             id: student.id,
             instituteId: student.instituteId,
             name: student.name,
-            phone: student.phone,
+            phone: student.gender==="FEMALE"? tokenData.role==="ADMIN"? student.phone: "HIDDEN": student.phone,
             home_district: student.home_district,
             email: student.email,
             profile_pic: student.profile_pic,
@@ -75,11 +76,15 @@ export async function GET(req: NextRequest) {
             instituteId: true,
             name: true,
             phone: true,
+            gender: true,
             home_district: true,
             role: true,
         }
     });
-    return NextResponse.json(responseSchema(false, "Students Retrieved", students), {
-        status: 200
+    return NextResponse.json(responseSchema(false, "Students Retrieved", students.map(student=>{
+        student.phone=student.gender==="FEMALE"? tokenData.role==="ADMIN"? student.phone: "HIDDEN": student.phone
+        return student
+    })), {
+        status: 200,
     });
 }

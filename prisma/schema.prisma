@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "./client"
+  provider      = "prisma-client-js"
+  output        = "./client"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
@@ -21,11 +21,17 @@ enum UserRoles {
   TEACHER
 }
 
+enum UserGender {
+  MALE
+  FEMALE
+}
+
 model User {
   id            String         @id @default(uuid())
   name          String?
   email         String         @unique
   phone         String?
+  gender        UserGender?    @default(MALE)
   password      String
   role          UserRoles      @default(STUDENT)
   instituteId   String?        @unique
@@ -94,18 +100,18 @@ enum EntryType {
 }
 
 model IndependentFund {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
   description String
   amount      Float
   type        EntryType
   creator_id  String
-  created_at  DateTime @default(now())
+  created_at  DateTime  @default(now())
 }
 
 model AdminActivity {
-  id          Int      @id @default(autoincrement())
-  title       String
-  creator_id  String
-  created_at  DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  title      String
+  creator_id String
+  created_at DateTime @default(now())
 }
