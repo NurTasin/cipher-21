@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-
+import courses from "@/lib/data/courses"
 export default function HackerRoutine() {
   return (
     <div className="min-h-[calc(100vh-275px)] md:min-h-[calc(100vh-160px)] p-4 bg-black rounded-lg overflow-x-auto md:overflow-x-visible">
@@ -23,13 +23,9 @@ export default function HackerRoutine() {
             <TableRow>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">Saturday</TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">
-                CSE-1101<br />MMH<br />(LAB-1)
+              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center" colSpan={3}>
+                CSE-1101 & CSE-1102<br />MMH<br />(LAB-1)
               </TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">
-                CSE-1102<br />MMH<br />(LAB-1)
-              </TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center" colSpan={2}>
                 CSE-1104<br />MHT<br />(H-LAB)
@@ -87,21 +83,15 @@ export default function HackerRoutine() {
                 CSE-1107<br />MMR<br />(Room-339)
               </TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">
-                CSE-1101<br />MMH<br />(LAB-1)
-              </TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center" colSpan={2}>
-                CSE-1102<br />MMH<br />(LAB-1)
+              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center" colSpan={3}>
+                CSE-1101 & CSE-1102<br />MMH<br />(LAB-1)
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">Wednesday</TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">
-                CSE-1101<br />MMH<br />(LAB-2)
-              </TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">
-                CSE-1102<br />MMH<br />(LAB-2)
+              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center" colSpan={3}>
+                CSE-1101 & CSE-1102<br />MMH<br />(LAB-2)
               </TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
