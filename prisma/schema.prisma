@@ -32,6 +32,7 @@ model User {
   email         String         @unique
   phone         String?
   gender        UserGender?    @default(MALE)
+  bio           String         @default("")
   password      String
   role          UserRoles      @default(STUDENT)
   instituteId   String?        @unique

@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { Facebook, Shield } from 'lucide-react';
 import { FaFacebookF, FaGithub, FaInstagram, FaLinkedin, FaWhatsapp } from "react-icons/fa";
@@ -16,6 +16,7 @@ interface Student {
   name: string;
   home_district: string;
   profile_pic: string;
+  bio: string;
   phone: string;
   email: string;
   role: "STUDENT" | "TEACHER" | "ADMIN";
@@ -89,6 +90,9 @@ export default function HackerStudentProfile() {
                 )}
               </div>
               <CardTitle className="mt-4 text-2xl font-bold text-green-500">{student.name}</CardTitle>
+              {
+                student.bio && <CardDescription className="mt-2 text-sm text-green-400">{student.bio}</CardDescription>
+              }
             </CardHeader>
             <CardContent className="flex flex-col items-center">
               <div className="w-full max-w-xs">

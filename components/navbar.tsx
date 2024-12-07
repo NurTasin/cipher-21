@@ -68,7 +68,7 @@ export default function Navbar() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="bg-gray-800 text-green-400 border-green-500">
                                     <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer">
-                                        Profile
+                                        <Link href={'/dashboard/profile'} >Profile</Link>
                                     </DropdownMenuItem>
                                     { userData?.role === "ADMIN" && <DropdownMenuItem className="hover:bg-gray-700 cursor-pointer" >
                                         <Link href="/admin">Admin Panel</Link>

@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
                 gender: true,
                 home_district: true,
                 email: true,
+                bio: true,
                 profile_pic: true,
                 whatsapp: true,
                 facebook: true,
@@ -55,6 +56,7 @@ export async function GET(req: NextRequest) {
             phone: student.gender==="FEMALE"? tokenData.role==="ADMIN"? student.phone: "HIDDEN": student.phone,
             home_district: student.home_district,
             email: student.email,
+            bio: student.bio,
             profile_pic: student.profile_pic,
             role: student.role,
             socials:{
