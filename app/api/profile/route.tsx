@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
             name: true,
             phone: true,
             email: true,
+            bio: true,
             role: true,
         }
     })
@@ -44,6 +45,7 @@ export async function GET(req: NextRequest) {
         name: profile.name,
         phone: profile.phone,
         email: profile.email,
+        bio: profile.bio,
         role: profile.role,
     }));
 }

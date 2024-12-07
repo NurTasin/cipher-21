@@ -78,7 +78,9 @@ export default function HackerStudentProfile() {
             <CardHeader className="flex flex-col items-center">
               <div className="relative">
                 <Avatar>
-                  <AvatarImage src={student.profile_pic} alt={student.name} className='rounded-full h-[200px]' />
+                  <AvatarImage src={student.profile_pic} alt={student.name} className='rounded-full h-[200px]' style={{
+                    aspectRatio: "1/1"
+                  }} />
                   <AvatarFallback className="bg-gray-800 text-green-500">
                     {student.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                   </AvatarFallback>

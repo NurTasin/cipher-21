@@ -124,6 +124,9 @@ export default function ProfileEdit() {
           description: "Your profile picture has been updated.",
           variant: "default",
         });
+        setInterval(() => {
+          window.location.reload();
+        },2000);
       } else {
         console.error('Error uploading to ImgBB:', result.error?.message);
         toast({
