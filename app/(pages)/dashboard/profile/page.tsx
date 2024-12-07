@@ -33,8 +33,8 @@ export default function ProfileEdit() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState<String |  null>(null);
-  const [passwordConfirm, setPasswordConfirm] = useState<String | null>(null);
+  const [password, setPassword] = useState<string |  null>(null);
+  const [passwordConfirm, setPasswordConfirm] = useState<string | null>(null);
   const [profileData, setProfileData] = useState<UserProfile>({
     name: "",
     phone: "",
