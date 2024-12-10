@@ -94,7 +94,6 @@ export default function HackerRoutine() {
                 CSE-1101 & CSE-1102<br />MMH<br />(LAB-2)
               </TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
-              <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center"></TableCell>
               <TableCell className="text-emerald-400 border border-emerald-500 p-2 text-center">
                 CSE-1105<br />MR<br />(Room-339)
               </TableCell>
