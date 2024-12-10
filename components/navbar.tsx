@@ -13,8 +13,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import user, { IUser } from "@/lib/user"
+import { useRouter } from "next/navigation"
 
 export default function Navbar() {
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userData, setUserData] = useState<IUser | null>(null);
@@ -132,6 +134,7 @@ export default function Navbar() {
                                         <Button
                                             variant="ghost"
                                             className="w-full justify-start hover:bg-gray-800"
+                                            onClick={() => {router.push("/dashboard/profile"); setIsOpen(false)}}
                                         >
                                             Profile
                                         </Button>
