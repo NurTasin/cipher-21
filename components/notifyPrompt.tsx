@@ -8,8 +8,8 @@ export default function NotifyPrompt() {
         // Ensure this runs only on the client side
         if (typeof window !== "undefined") {
             OneSignal.init({
-                appId: "073374a7-f4d0-4624-a194-3546b97ac6a5",
-                safari_web_id: "web.onesignal.auto.1a1cd43f-104c-4ac2-b069-e07775f1eeb9",
+                appId: "fe41eacd-a963-4bee-81a0-64209815b20a",
+                safari_web_id: "web.onesignal.auto.313afc18-65a3-4cb5-bd8a-eabd69c6e4d8",
                 allowLocalhostAsSecureOrigin: true, // For development purposes on localhost
             });
 
